@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Mes vidéos{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">Mes vidéos</h1>
+    
+    {% if acces_packs %}
+        {% for acces in acces_packs %}
+        <div class="bg-white rounded-lg shadow-md p-4 mb-4">
+            <h2 class="text-xl font-bold text-blue-600">{{ acces.pack.nom }}</h2>
+            <p class="text-gray-600 mb-4">Activé le {{ acces.date_activation|date:"d/m/Y" }}</p>
+            <div class="space-y-2">
+                {% for pv in acces.pack.packvideo_set.all %}
+                <a href="{% url 'courses:video_player' pv.video.id %}" class="block text-gray-700 hover:text-blue-600">
+                    📹 {{ pv.video.titre }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-gray-500">Vous n'avez pas encore acheté de packs.</p>
+        <a href="{% url 'courses:annee_list' %}" class="text-blue-600 hover:underline">Parcourir les packs</a>
+    {% endif %}
+</div>
+{% endblock %}

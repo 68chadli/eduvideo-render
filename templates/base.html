@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>EduVideo - {% block title %}Accueil{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1E3A8A',
+                        secondary: '#F59E0B',
+                        accent: '#10B981',
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            min-height: 100vh;
+        }
+        
+        .btn {
+            @apply px-6 py-2 rounded-full font-semibold transition duration-300;
+        }
+        .btn-primary {
+            @apply bg-primary hover:bg-blue-800 text-white;
+        }
+        .card {
+            @apply bg-white rounded-2xl shadow-lg hover:shadow-xl transition duration-300;
+        }
+        .nav-link {
+            @apply text-gray-700 hover:text-primary transition duration-200;
+        }
+        
+        /* Responsive : boutons pleine largeur sur mobile */
+        @media (max-width: 640px) {
+            .btn-mobile-full {
+                width: 100%;
+                text-align: center;
+                justify-content: center;
+            }
+            button, .btn {
+                min-height: 48px;
+            }
+        }
+        
+        /* Animation de fond subtile */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-white/90 backdrop-blur-md shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="{% url 'accueil' %}" class="text-2xl font-bold bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">
+                        EduVideo
+                    </a>
+                </div>
+
+                <!-- Menu desktop -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="{% url 'accueil' %}" class="nav-link"><i class="fas fa-home mr-1"></i> Accueil</a>
+                    <a href="{% url 'courses:annee_list' %}" class="nav-link"><i class="fas fa-graduation-cap mr-1"></i> Années</a>
+                    
+                    {% if user.is_authenticated %}
+                        {% if user.is_superuser %}
+                            <a href="{% url 'dashboard:dashboard_index' %}" class="nav-link"><i class="fas fa-chart-line mr-1"></i> Dashboard</a>
+                            <a href="{% url 'dashboard:parametres' %}" class="nav-link"><i class="fas fa-sliders-h mr-1"></i> Paramètres</a>
+                        {% endif %}
+                        <a href="{% url 'orders:cart' %}" class="nav-link"><i class="fas fa-shopping-cart mr-1"></i> Panier</a>
+                        <a href="{% url 'orders:my_videos' %}" class="nav-link"><i class="fas fa-video mr-1"></i> Mes vidéos</a>
+                        <a href="{% url 'accounts:profile' %}" class="nav-link"><i class="fas fa-user mr-1"></i> {{ user.username }}</a>
+                        <a href="{% url 'contact' %}" class="nav-link"><i class="fas fa-phone mr-1"></i> Contact</a>
+                        <form action="{% url 'accounts:logout' %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="text-red-600 hover:text-red-700 transition"><i class="fas fa-sign-out-alt mr-1"></i> Déconnexion</button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'accounts:login' %}" class="nav-link"><i class="fas fa-key mr-1"></i> Connexion</a>
+                        <a href="{% url 'accounts:register' %}" class="bg-primary text-white px-4 py-2 rounded-full hover:bg-blue-800 transition"><i class="fas fa-user-plus mr-1"></i> Inscription</a>
+                    {% endif %}
+                </div>
+
+                <!-- Bouton menu mobile (hamburger) -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-gray-600 hover:text-primary focus:outline-none p-2" aria-label="Menu">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Menu mobile déroulant - version améliorée -->
+            <div id="mobile-menu" class="hidden md:hidden border-t border-gray-100 mt-2 py-3">
+                <div class="flex flex-col space-y-2">
+                    <a href="{% url 'accueil' %}" class="nav-link py-3 px-2 rounded-lg hover:bg-gray-50"><i class="fas fa-home mr-3 w-5"></i> Accueil</a>
+                    <a href="{% url 'courses:annee_list' %}" class="nav-link py-3 px-2 rounded-lg hover:bg-gray-50"><i class="fas fa-graduation-cap mr-3 w-5"></i> Années</a>
+                    
+                    {% if user.is_authenticated %}
+                        {% if user.is_superuser %}
+                            <a href="{% url 'dashboard:dashboard_index' %}" class="nav-link py-3 px-2 rounded-lg hover:bg-gray-50"><i class="fas fa-chart-line mr-3 w-5"></i> Dashboard</a>
+                            <a href="{% url 'dashboard:parametres' %}" class="nav-link py-3 px-2 rounded-lg hover:bg-gray-50"><i class="fas fa-sliders-h mr-3 w-5"></i> Paramètres</a>
+                        {% endif %}
+                        <a href="{% url 'orders:cart' %}" class="nav-link py-3 px-2 rounded-lg hover:bg-gray-50"><i class="fas fa-shopping-cart mr-3 w-5"></i> Panier</a>
+                        <a href="{% url 'orders:my_videos' %}" class="nav-link py-3 px-2 rounded-lg hover:bg-gray-50"><i class="fas fa-video mr-3 w-5"></i> Mes vidéos</a>
+                        <a href="{% url 'accounts:profile' %}" class="nav-link py-3 px-2 rounded-lg hover:bg-gray-50"><i class="fas fa-user mr-3 w-5"></i> {{ user.username }}</a>
+                        <a href="{% url 'contact' %}" class="nav-link py-3 px-2 rounded-lg hover:bg-gray-50"><i class="fas fa-phone mr-3 w-5"></i> Contact</a>
+                        <form action="{% url 'accounts:logout' %}" method="post" class="w-full">
+                            {% csrf_token %}
+                            <button type="submit" class="text-red-600 hover:text-red-700 w-full text-left py-3 px-2 rounded-lg hover:bg-red-50"><i class="fas fa-sign-out-alt mr-3 w-5"></i> Déconnexion</button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'accounts:login' %}" class="nav-link py-3 px-2 rounded-lg hover:bg-gray-50"><i class="fas fa-key mr-3 w-5"></i> Connexion</a>
+                        <a href="{% url 'accounts:register' %}" class="bg-primary text-white px-4 py-3 rounded-full text-center block hover:bg-blue-800 transition mt-2"><i class="fas fa-user-plus mr-2"></i> Inscription</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+        <!-- Breadcrumb -->
+        {% if breadcrumbs %}
+        <div class="text-sm text-gray-500 mb-4 flex items-center flex-wrap">
+            {% for crumb in breadcrumbs %}
+                {% if not forloop.last %}
+                    <a href="{{ crumb.url }}" class="hover:text-primary transition">{{ crumb.name }}</a>
+                    <i class="fas fa-chevron-right mx-2 text-xs text-gray-400"></i>
+                {% else %}
+                    <span class="text-gray-700 font-medium">{{ crumb.name }}</span>
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-white/80 backdrop-blur-sm border-t border-gray-200 mt-12 py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500 text-sm">
+            &copy; 2026 EduVideo - Tous droits réservés
+        </div>
+    </footer>
+
+    <script>
+        // Menu mobile toggle
+        const btn = document.getElementById('mobile-menu-button');
+        const menu = document.getElementById('mobile-menu');
+        if (btn && menu) {
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+        }
+    </script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100,
+            easing: 'ease-in-out'
+        });
+    </script>
+</body>
+</html>

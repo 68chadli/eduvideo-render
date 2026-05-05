@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+        <h2 style="color: #2563eb;">✅ Commande activée !</h2>
+        
+        <p>Bonjour <strong>{{ client.first_name }} {{ client.last_name }}</strong>,</p>
+        
+        <p>Nous vous confirmons que votre commande <strong>n°{{ commande.id }}</strong> a été activée.</p>
+        
+        <h3 style="color: #2563eb;">📦 Détail de votre commande :</h3>
+        <ul>
+            {% for cp in packs %}
+            <li>{{ cp.pack.nom }} : {{ cp.prix_au_moment_achat }} DA</li>
+            {% endfor %}
+        </ul>
+        
+        <p style="font-size: 18px; font-weight: bold;">💰 Montant total : {{ commande.montant_total }} DA</p>
+        
+        <p>Vous pouvez maintenant accéder à vos vidéos :</p>
+        <p style="text-align: center;">
+            <a href="{{ site_url }}/orders/my-videos/" 
+               style="display: inline-block; padding: 10px 20px; background-color: #2563eb; color: white; text-decoration: none; border-radius: 5px;">
+                Accéder à mes vidéos
+            </a>
+        </p>
+        
+        <hr style="margin: 20px 0;">
+        
+        <p style="font-size: 12px; color: #666;">
+            Merci de votre confiance !<br>
+            L'équipe EduVideo
+        </p>
+    </div>
+</body>
+</html>

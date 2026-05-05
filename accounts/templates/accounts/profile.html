@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Mon profil{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-2xl font-bold mb-6">Mon profil</h2>
+    <p><strong>Nom d'utilisateur :</strong> {{ user.username }}</p>
+    <p><strong>Email :</strong> {{ user.email }}</p>
+    <p><strong>Prénom :</strong> {{ user.first_name }}</p>
+    <p><strong>Nom :</strong> {{ user.last_name }}</p>
+    <p><strong>Téléphone :</strong> {{ user.telephone|default:"Non renseigné" }}</p>
+</div>
+{% endblock %}

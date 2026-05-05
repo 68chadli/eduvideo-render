@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Années d'étude{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6 md:mb-8 px-2" data-aos="fade-down">
+        Choisissez votre niveau
+    </h1>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        {% for annee in annees %}
+        <a href="{% url 'courses:specialite_list' annee.id %}" 
+           class="bg-white rounded-xl shadow-md p-5 md:p-6 hover:shadow-xl transition block transform hover:scale-105 active:scale-95"
+           data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:50 }}">
+            <h2 class="text-lg md:text-xl font-bold text-primary mb-1 md:mb-2">{{ annee.nom }}</h2>
+            <p class="text-sm md:text-base text-gray-600">Voir les spécialités →</p>
+        </a>
+        {% empty %}
+        <p class="text-gray-500 col-span-full">Aucune année disponible pour le moment.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

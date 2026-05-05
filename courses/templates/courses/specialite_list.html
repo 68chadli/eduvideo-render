@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Spécialités - {{ annee.nom }}{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">{{ annee.nom }}</h1>
+    <h2 class="text-base md:text-xl text-gray-600 mb-6 md:mb-8">Choisissez votre spécialité</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        {% for specialite in specialites %}
+        <a href="{% url 'courses:matiere_list' annee.id specialite.id %}" 
+           class="bg-white rounded-xl shadow-md p-5 md:p-6 hover:shadow-xl transition block transform hover:scale-105 active:scale-95">
+            <h2 class="text-lg md:text-xl font-bold text-primary mb-2">{{ specialite.nom }}</h2>
+            <p class="text-sm md:text-base text-gray-600">{{ specialite.description|default:"Voir les matières →" }}</p>
+        </a>
+        {% empty %}
+        <p class="text-gray-500 col-span-full">Aucune spécialité disponible pour cette année.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

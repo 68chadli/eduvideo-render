@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Tableau de bord{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">📊 Tableau de bord</h1>
+    
+    <div class="grid md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-white rounded-lg shadow-md p-4 text-center">
+            <div class="text-3xl font-bold text-orange-600">{{ commandes_attente }}</div>
+            <div class="text-gray-600">Commandes en attente</div>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-4 text-center">
+            <div class="text-3xl font-bold text-blue-600">{{ clients_actifs }}</div>
+            <div class="text-gray-600">Clients actifs</div>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-4 text-center">
+            <div class="text-3xl font-bold text-green-600">{{ packs_vendus|floatformat:0 }} DA</div>
+            <div class="text-gray-600">CA total</div>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-4 text-center">
+            <div class="text-3xl font-bold text-purple-600">{{ ca_mois|floatformat:0 }} DA</div>
+            <div class="text-gray-600">CA du mois</div>
+        </div>
+    </div>
+    
+    <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-white rounded-lg shadow-md p-4">
+            <h2 class="text-lg font-bold mb-3">📈 CA par mois</h2>
+            <div class="space-y-2">
+                {% for item in ca_historique %}
+                <div class="flex justify-between text-sm">
+                    <span>{{ item.mois }}</span>
+                    <span class="font-semibold">{{ item.total|floatformat:0 }} DA</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-blue-600 h-2 rounded-full" style="width: {% widthratio item.total ca_annee 100 %}%"></div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md p-4">
+            <h2 class="text-lg font-bold mb-3">🔗 Liens rapides</h2>
+            <ul class="space-y-2">
+                <li><a href="{% url 'admin:orders_commande_changelist' %}" class="text-blue-600 hover:underline">📦 Gérer les commandes</a></li>
+                <li><a href="{% url 'dashboard:parametres' %}" class="text-blue-600 hover:underline">⚙️ Paramètres</a></li>
+                <li><a href="/admin/" class="text-blue-600 hover:underline">📋 Administration Django</a></li>
+                <li><a href="{% url 'orders:export_excel' %}" class="text-blue-600 hover:underline">📊 Exporter Excel</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

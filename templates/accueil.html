@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block content %}
+<!-- Hero section -->
+<section class="relative bg-gradient-to-r from-primary to-blue-600 rounded-3xl overflow-hidden shadow-2xl mb-16" data-aos="fade-down">
+    <div class="absolute inset-0 bg-black opacity-20"></div>
+    <div class="relative z-10 px-6 py-16 md:py-24 text-center text-white">
+        <h1 class="text-4xl md:text-6xl font-extrabold mb-4">
+            Apprenez à votre rythme
+        </h1>
+        <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto opacity-90">
+            Des cours vidéo de qualité, accessibles partout, tout le temps. Réussissez vos examens avec EduVideo.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{% url 'courses:annee_list' %}" class="bg-secondary hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-full transition transform hover:scale-105 shadow-lg">
+                <i class="fas fa-play mr-2"></i> Commencer gratuitement
+            </a>
+            <a href="{% url 'contact' %}" class="bg-white text-primary hover:bg-gray-100 font-bold py-3 px-8 rounded-full transition shadow-lg">
+                <i class="fas fa-phone mr-2"></i> Nous contacter
+            </a>
+        </div>
+    </div>
+    <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none">
+        <svg class="relative block w-full h-12" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" fill="white" fill-opacity="0.3"></path>
+        </svg>
+    </div>
+</section>
+
+<!-- Chiffres clés -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+    <div class="bg-white rounded-2xl shadow-md p-6 text-center hover:shadow-xl transition" data-aos="fade-up" data-aos-delay="0">
+        <i class="fas fa-users text-4xl text-primary mb-3"></i>
+        <div class="text-3xl font-bold text-gray-800">+1000</div>
+        <div class="text-gray-500">Élèves inscrits</div>
+    </div>
+    <div class="bg-white rounded-2xl shadow-md p-6 text-center hover:shadow-xl transition" data-aos="fade-up" data-aos-delay="100">
+        <i class="fas fa-video text-4xl text-primary mb-3"></i>
+        <div class="text-3xl font-bold text-gray-800">+200</div>
+        <div class="text-gray-500">Vidéos disponibles</div>
+    </div>
+    <div class="bg-white rounded-2xl shadow-md p-6 text-center hover:shadow-xl transition" data-aos="fade-up" data-aos-delay="200">
+        <i class="fas fa-chalkboard-teacher text-4xl text-primary mb-3"></i>
+        <div class="text-3xl font-bold text-gray-800">+50</div>
+        <div class="text-gray-500">Enseignants experts</div>
+    </div>
+</section>
+
+<!-- Packs populaires -->
+<section class="mb-16">
+    <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center" data-aos="fade-up">
+        🔥 Packs les plus populaires
+    </h2>
+    <div class="grid md:grid-cols-3 gap-8">
+        {% for pack in packs_populaires %}
+        <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition duration-300 overflow-hidden" data-aos="zoom-in" data-aos-delay="{{ forloop.counter0|add:100 }}">
+            <div class="bg-gradient-to-r from-primary to-blue-500 h-2"></div>
+            <div class="p-6">
+                <div class="flex flex-wrap gap-2 mb-2">
+                    {% if pack.est_populaire %}
+                    <span class="bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full">🔥 Populaire</span>
+                    {% endif %}
+                    {% if pack.est_nouveau %}
+                    <span class="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">🆕 Nouveau</span>
+                    {% endif %}
+                </div>
+                <h3 class="text-xl font-bold text-primary mb-2">{{ pack.nom }}</h3>
+                <p class="text-gray-600 mb-4">{{ pack.description|truncatewords:15 }}</p>
+                <p class="text-3xl font-bold text-green-600 mb-4">{{ pack.prix }} DA</p>
+                <a href="{% url 'courses:pack_detail' pack.id %}" class="inline-block bg-primary hover:bg-blue-800 text-white px-6 py-2 rounded-full transition w-full text-center">
+                    <i class="fas fa-eye mr-2"></i> Voir le pack
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-gray-500 col-span-3 text-center">Aucun pack disponible pour le moment.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Témoignages -->
+<section data-aos="fade-up">
+    <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">
+        💬 Ils nous font confiance
+    </h2>
+    <div class="grid md:grid-cols-2 gap-8">
+        <div class="bg-white rounded-2xl shadow-md p-6 italic border-l-4 border-secondary" data-aos="fade-right" data-aos-delay="0">
+            <i class="fas fa-quote-left text-secondary text-2xl mb-3 block"></i>
+            <p class="text-gray-700 mb-4">“Grâce à EduVideo, j’ai réussi mon bac avec mention ! Les vidéos sont claires et les profs très compétents.”</p>
+            <div class="font-bold text-primary">— Amina, 1ère AS</div>
+            <div class="flex text-yellow-400 mt-2">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            </div>
+        </div>
+        <div class="bg-white rounded-2xl shadow-md p-6 italic border-l-4 border-secondary" data-aos="fade-left" data-aos-delay="100">
+            <i class="fas fa-quote-left text-secondary text-2xl mb-3 block"></i>
+            <p class="text-gray-700 mb-4">“Les corrigés d’épreuves m’ont permis de gagner en confiance. Je recommande vivement !”</p>
+            <div class="font-bold text-primary">— Mehdi, 3ème AS</div>
+            <div class="flex text-yellow-400 mt-2">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

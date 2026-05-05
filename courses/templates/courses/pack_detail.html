@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ pack.nom }}{% endblock %}
+
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+        {% if forloop.first %}
+            <div class="mb-4 p-4 rounded {% if message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %}">
+                {{ message }}
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<div class="max-w-4xl mx-auto px-2 sm:px-0">
+    <!-- Badges et titre -->
+    <div class="relative mb-4">
+        <div class="flex flex-wrap gap-2 mb-2">
+            {% if pack.est_populaire %}
+            <span class="bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full inline-flex items-center">
+                🔥 Populaire
+            </span>
+            {% endif %}
+            {% if pack.est_nouveau %}
+            <span class="bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full inline-flex items-center">
+                🆕 Nouveau
+            </span>
+            {% endif %}
+        </div>
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-800">{{ pack.nom }}</h1>
+    </div>
+    
+    <p class="text-gray-600 mb-6">{{ pack.description }}</p>
+    <p class="text-2xl font-bold text-green-600 mb-8">{{ pack.prix }} DA</p>
+    
+    <!-- Bouton Ajouter au panier (pleine largeur sur mobile) -->
+    <form action="{% url 'orders:add_to_cart' pack.id %}" method="post" class="mb-8">
+        {% csrf_token %}
+        <button type="submit" class="w-full sm:w-auto bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition active:scale-95">
+            <i class="fas fa-cart-plus mr-2"></i> Ajouter au panier
+        </button>
+    </form>
+
+    <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-4">Contenu du pack</h2>
+    
+    <div class="space-y-4">
+        {% for pv in pack_videos %}
+        <div class="bg-white rounded-lg shadow-md p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <div class="flex-1">
+                <h3 class="text-base md:text-lg font-semibold">{{ pv.video.titre }}</h3>
+                <p class="text-gray-500 text-sm">{{ pv.video.duree }} | {{ pv.video.get_type_video_display }}</p>
+                {% if pv.est_video_explicative %}
+                <span class="inline-block bg-green-100 text-green-700 text-xs px-2 py-1 rounded mt-1">🎬 Essai gratuit</span>
+                {% endif %}
+            </div>
+            <div class="w-full sm:w-auto">
+                {% if pv.est_video_explicative %}
+                <a href="{% url 'courses:video_player' pv.video.id %}" 
+                   class="block sm:inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-center active:scale-95">
+                    Regarder (gratuit)
+                </a>
+                {% elif user.is_authenticated and user.est_actif %}
+                <a href="{% url 'courses:video_player' pv.video.id %}" 
+                   class="block sm:inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-center active:scale-95">
+                    Regarder
+                </a>
+                {% else %}
+                <button disabled class="w-full sm:w-auto bg-gray-400 text-white px-4 py-2 rounded-lg cursor-not-allowed">
+                    Achète le pack pour regarder
+                </button>
+                {% endif %}
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-gray-500">Aucune vidéo dans ce pack pour le moment.</p>
+        {% endfor %}
+    </div>
+
+    {% if not user.is_authenticated %}
+    <div class="mt-8 p-4 bg-yellow-100 rounded-lg text-center">
+        <p class="text-yellow-700">Connectez-vous ou inscrivez-vous pour acheter ce pack.</p>
+        <a href="{% url 'accounts:login' %}" class="inline-block mt-2 bg-blue-600 text-white px-4 py-2 rounded-lg">Se connecter</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

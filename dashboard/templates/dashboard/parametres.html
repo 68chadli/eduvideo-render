@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Paramètres - Directeur{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <h1 class="text-2xl font-bold mb-6">⚙️ Paramètres généraux</h1>
+    
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h2 class="text-xl font-bold mb-4">📅 Fin d'année scolaire</h2>
+        <form method="post">
+            {% csrf_token %}
+            <input type="date" name="date_fin_annee" value="{{ params.date_fin_annee|date:'Y-m-d' }}" class="w-full p-2 border rounded mb-3">
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Enregistrer</button>
+        </form>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-bold mb-4">🔒 Accès aux vidéos</h2>
+        <p class="mb-4">Statut : 
+            {% if params.acces_bloques %}
+                <span class="text-red-600 font-bold">BLOQUÉ</span>
+            {% else %}
+                <span class="text-green-600 font-bold">ACTIF</span>
+            {% endif %}
+        </p>
+        <form method="post">
+            {% csrf_token %}
+            {% if params.acces_bloques %}
+                <button type="submit" name="debloquer" class="bg-green-600 text-white px-4 py-2 rounded">Réactiver les accès</button>
+            {% else %}
+                <button type="submit" name="bloquer" class="bg-red-600 text-white px-4 py-2 rounded" onclick="return confirm('Bloquer tous les accès ?')">Bloquer tous les accès</button>
+            {% endif %}
+        </form>
+    </div>
+</div>
+{% endblock %}
