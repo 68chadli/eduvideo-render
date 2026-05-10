@@ -6,7 +6,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-RUN python manage.py collectstatic --noinput
-
-CMD ["gunicorn", "core.wsgi:application", "--bind", "0.0.0.0:10000"]
+ENTRYPOINT ["/entrypoint.sh"]
