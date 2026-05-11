@@ -31,13 +31,13 @@ class PackVideoInline(admin.TabularInline):
 
 @admin.register(Pack)
 class PackAdmin(admin.ModelAdmin):
-    list_display = ['nom', 'prix', 'type_pack', 'matiere', 'annee', 'est_populaire', 'est_nouveau', 'est_visible']
+    list_display = ['nom', 'prix', 'type_pack', 'matiere', 'specialite', 'annee', 'est_populaire', 'est_nouveau', 'est_visible']
     list_filter = ['type_pack', 'est_populaire', 'est_nouveau', 'est_visible']
     list_editable = ['est_populaire', 'est_nouveau', 'prix']
-    inlines = [PackVideoInline]  # ← Gère les vidéos via PackVideo
+    inlines = [PackVideoInline]
     fieldsets = (
         (None, {
-            'fields': ('nom', 'description', 'prix', 'type_pack', 'matiere', 'annee', 'est_visible')
+            'fields': ('nom', 'description', 'prix', 'type_pack', 'matiere', 'specialite', 'annee', 'est_visible')
         }),
         ('Mise en avant', {
             'fields': ('est_populaire', 'est_nouveau'),
