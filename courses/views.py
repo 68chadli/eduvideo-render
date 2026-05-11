@@ -52,7 +52,7 @@ def pack_list(request, annee_id, specialite_id, matiere_id):
     annee = get_object_or_404(Annee, id=annee_id)
     specialite = get_object_or_404(Specialite, id=specialite_id)
     matiere = get_object_or_404(Matiere, id=matiere_id)
-    packs = Pack.objects.filter(annee=annee, matiere=matiere)
+    packs = Pack.objects.filter(annee=annee, specialite=specialite, matiere=matiere)
     
     breadcrumbs = [
         {'name': 'Accueil', 'url': '/'},

@@ -84,7 +84,7 @@ class Pack(models.Model):
     prix = models.DecimalField(max_digits=10, decimal_places=2)
     type_pack = models.CharField(max_length=20, choices=TYPE_PACK_CHOICES, default='annuel')
     matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE, related_name='packs')
-    specialite = models.ForeignKey(Specialite, on_delete=models.CASCADE, related_name='packs')  # ← NOUVEAU
+    specialite = models.ForeignKey(Specialite, on_delete=models.CASCADE, related_name='packs', null=True, blank=True)
     annee = models.ForeignKey(Annee, on_delete=models.CASCADE, related_name='packs')
     videos = models.ManyToManyField(Video, through='PackVideo', related_name='packs')
     est_visible = models.BooleanField(default=True)
